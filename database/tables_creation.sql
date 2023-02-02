@@ -57,3 +57,6 @@ CREATE TABLE WorkshopRatings(
     Rating DECIMAL(2,2) NULL,
     FOREIGN KEY (WorkshopId) REFERENCES Workshops(WorkshopId)
 );
+
+ALTER TABLE Employees
+ADD UNIQUE (Username);
