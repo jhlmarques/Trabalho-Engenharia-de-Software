@@ -31,10 +31,10 @@ CREATE TABLE TutorSubjects(
 
 -- Atividades
 CREATE TABLE Activities(
-    ActivityId INT IDENTITY(1, 1) PRIMARY KEY NOT NULL ,
+    ActivityId INT IDENTITY(1, 1) NOT NULL,
     TutorId INT NOT NULL, -- Tutor responsável pela atividade 
     SubjectId INT NOT NULL, -- Assunto da atividade
-    MeetingPlace NVARCHAR(50) NOT NULL,
+    MeetingPlace NVARCHAR(50) NOT NULL
     StartDate DATETIME NOT NULL, -- Data de ocorrência da atividade
     SlotsAmount INT NOT NULL, -- Número de participantes máximo (Mentoria = 1, Workshops > 1)
     Finished BIT NOT NULL, -- Atividade já foi terminada
@@ -56,4 +56,7 @@ CREATE TABLE ActivitiesRatings(
     EmployeeId INT NOT NULL,
     Rating DECIMAL (4, 2) NOT NULL, 
     WrittenFeedback NVARCHAR(250) NULL,
+    FOREIGN KEY (ActivityId) REFERENCES Activities(ActivityId),
+    FOREIGN KEY (EmployeeId) REFERENCES Employees(EmployeeId)
 );
+
