@@ -1,62 +1,59 @@
+-- Cargos possíveis para um funcionário
 CREATE TABLE Roles (
     RoleId INT IDENTITY (1, 1) PRIMARY KEY NOT NULL,
     RoleName NVARCHAR(20) NOT NULL
 );
 
+-- Dados de um funcionário (usuário do sistema)
 CREATE TABLE Employees (
     EmployeeId INT IDENTITY (1, 1) PRIMARY KEY NOT NULL,
     Username NVARCHAR(30) NOT NULL,
     Password NVARCHAR(30) NOT NULL,
     CompleteName NVARCHAR(50) NOT NULL,
     RoleId INT NOT NULL,
-    FOREIGN KEY (RoleId) REFERENCES Roles(RoleId)
+    FOREIGN KEY (RoleId) REFERENCES Roles(RoleId),
+    UNIQUE(Username)
 );
 
+-- Assuntos de atividades existentes
 CREATE TABLE Subjects(
     SubjectId INT IDENTITY (1, 1) PRIMARY KEY NOT NULL,
     SubjectName NVARCHAR(20) NOT NULL
 );
 
-CREATE TABLE Mentorships(
-    MentorshipId INT IDENTITY (1, 1) PRIMARY KEY NOT NULL,
-    MentorId INT NOT NULL,
+-- Assuntos sobre os quais um tutor pode criar uma nova atividade
+CREATE TABLE TutorSubjects(
+    TutorId INT NOT NULL,
     SubjectId INT NOT NULL,
-    FOREIGN KEY (MentorId) REFERENCES Employees(EmployeeId),
+    FOREIGN KEY (TutorId) REFERENCES Employees(EmployeeId),
     FOREIGN KEY (SubjectId) REFERENCES Subjects(SubjectId)
 );
 
-CREATE TABLE MentorshipHistory(
-    MentorshipId INT NOT NULL,
-    MentoredId INT NOT NULL,
-    StartDate DATETIME NOT NULL,
-    MentorRating DECIMAL(2,2) NULL,
-    MentoredRating DECIMAL(2,2) NULL,
-    MentoredFeedback NVARCHAR(250) NULL,
-    Canceled BIT NOT NULL,
-    PRIMARY KEY(MentorshipId, StartDate),
-    FOREIGN KEY (MentoredId) REFERENCES Employees(EmployeeId),
-    FOREIGN KEY (MentorshipId) REFERENCES Mentorships(MentorshipId)
-);
-
-CREATE TABLE Workshops(
-    WorkshopId INT IDENTITY (1, 1) PRIMARY KEY NOT NULL,
-    MentorId INT NOT NULL,
-    Title NVARCHAR(100) NOT NULL,
-    SubjectId INT NOT NULL,
-    StartDate DATETIME NOT NULL,
-    MettingPlace NVARCHAR(50) NOT NULL,
-    RemainingSeats int NOT NULL,
-    Canceled BIT NOT NULL,
-    FOREIGN KEY (MentorId) REFERENCES Employees(EmployeeId),
+-- Atividades
+CREATE TABLE Activities(
+    ActivityId INT IDENTITY(1, 1) PRIMARY KEY NOT NULL ,
+    TutorId INT NOT NULL, -- Tutor responsável pela atividade 
+    SubjectId INT NOT NULL, -- Assunto da atividade
+    MeetingPlace NVARCHAR(50) NOT NULL,
+    StartDate DATETIME NOT NULL, -- Data de ocorrência da atividade
+    SlotsAmount INT NOT NULL, -- Número de participantes máximo (Mentoria = 1, Workshops > 1)
+    Finished BIT NOT NULL, -- Atividade já foi terminada
+    FOREIGN KEY (TutorId) REFERENCES Employees(EmployeeId),
     FOREIGN KEY (SubjectId) REFERENCES Subjects(SubjectId)
 );
 
-CREATE TABLE WorkshopRatings(
-    WorkshopId INT NOT NULL,
-    EmployeeId UNIQUEIDENTIFIER,
-    Rating DECIMAL(2,2) NULL,
-    FOREIGN KEY (WorkshopId) REFERENCES Workshops(WorkshopId)
+-- Alocação de atividades
+CREATE TABLE ActivityAllocation(
+    ActivityId INT NOT NULL,
+    EmployeeId INT NOT NULL,
+    FOREIGN KEY (ActivityId) REFERENCES Activities(ActivityId),
+    FOREIGN KEY (EmployeeId) REFERENCES Employees(EmployeeId)
 );
 
-ALTER TABLE Employees
-ADD UNIQUE (Username);
+-- Avaliação de usuário por evento
+CREATE TABLE ActivitiesRatings(
+    ActivityId INT NOT NULL,
+    EmployeeId INT NOT NULL,
+    Rating DECIMAL (4, 2) NOT NULL, 
+    WrittenFeedback NVARCHAR(250) NULL,
+);
