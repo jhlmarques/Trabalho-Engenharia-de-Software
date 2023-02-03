@@ -1,12 +1,15 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, session
 from controller.login_controller import LoginController
+
 app = Flask(__name__)
 
-# Adicionar esse decorador em uma função faz com que o flask associe a função abaixo a
-# um URL. Ex: URL Padrão
+app.secret_key = 'khjNejV9pKHs8PXXgIJ7R1yMmxgWZyC6'
+
+   
+# Handles login attempts
 @app.route("/", methods=["GET", "POST"])
 def login():
-    # render_template renderiza um arquivo html e retorna.
+    # Verify login and save to session
     if request.method == "POST":
         controller = LoginController()
         username = request.form.get("username")
@@ -14,14 +17,25 @@ def login():
 
         is_authenticated = controller.authenticate_user(username, password)
         if is_authenticated:
-           return  redirect("/activities")
+            loginInfo = controller.getLoginInfo(username)
+            session['username'] = loginInfo.username
+            session['realName'] = loginInfo.realName
+            session['roleId'] = loginInfo.roleId
+            session['roleName'] = loginInfo.roleName
+            
+            return redirect("/activities")
+
+    # Check if there was a valid login in this session and redirect to the main page
+    elif request.method == "GET":
+        if('username' in session):
+            return redirect("/activities")
        
     return render_template('login.html')
 
 
 @app.route("/activities", methods=["GET", "POST"])
 def activities():
-        return render_template('activities.html')
+    return render_template('activities.html')
 
 if __name__ == "__main__":
     app.run()
