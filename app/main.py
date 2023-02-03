@@ -1,5 +1,5 @@
-from flask import Flask, render_template, request
-
+from flask import Flask, render_template, request, redirect
+from controller.login_controller import LoginController
 app = Flask(__name__)
 
 # Adicionar esse decorador em uma função faz com que o flask associe a função abaixo a
@@ -7,7 +7,17 @@ app = Flask(__name__)
 @app.route("/", methods=["GET", "POST"])
 def login():
     # render_template renderiza um arquivo html e retorna.
-        return render_template('login.html')
+    if request.method == "POST":
+        controller = LoginController()
+        username = request.form.get("username")
+        password = request.form.get("password")
+
+        is_authenticated = controller.authenticate_user(username, password)
+        if is_authenticated:
+           return  redirect("/activities")
+       
+    return render_template('login.html')
+
 
 @app.route("/activities", methods=["GET", "POST"])
 def activities():
