@@ -1,14 +1,14 @@
+delete from TutorSubjects
+delete from ActivityAllocation
+delete from ActivitiesRatings
 delete from Activities
 DBCC Checkident (Activities, RESEED, 0);
-delete from ActivitiesRatings
-delete from ActivityAllocation
 delete from Employees
 DBCC Checkident (Employees, RESEED, 0);
 delete from Roles
 DBCC Checkident (Roles, RESEED, 0);
 delete from Subjects
 DBCC Checkident (Subjects, RESEED, 0);
-delete from TutorSubjects
 
 INSERT INTO Subjects (SubjectName)
 VALUES
