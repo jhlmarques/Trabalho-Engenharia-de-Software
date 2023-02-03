@@ -1,12 +1,13 @@
 from flask import Flask, render_template, request, redirect, session
 from controller.login_controller import LoginController, LoginInfo
-from controller.schedule_controller import ScheduleController
+from controller.schedule_controller import ScheduleController, Activity
+from typing import List
 
 app = Flask(__name__)
 
 app.secret_key = 'khjNejV9pKHs8PXXgIJ7R1yMmxgWZyC6'
 
-   
+
 # Handles login attempts
 @app.route("/", methods=["GET", "POST"])
 def login():
@@ -20,9 +21,6 @@ def login():
         if is_authenticated:
             loginInfo = controller.getLoginInfo(username)
             session['username'] = loginInfo.username
-            session['realName'] = loginInfo.realName
-            session['roleId'] = loginInfo.roleId
-            session['roleName'] = loginInfo.roleName
             
             return redirect("/activities")
 
@@ -37,36 +35,38 @@ def login():
 @app.route("/activities", methods=["GET", "POST"])
 def activities():
     if request.method == "GET":
-        controller = ScheduleController()
-        loginInfo = LoginInfo(
-        session['username'],
-        session['realName'],
-        session['roleId'],
-        session['roleName']
-        )
+        s_controller = ScheduleController()
+        l_controller = LoginController()
+        loginInfo = l_controller.getLoginInfo(session['username'])
+
+        activities = s_controller.getUserActivities(loginInfo)
         
-        activities = controller.getUserActivities(loginInfo)
-        html_output = ('<table><tr>'
-        '<th>Assunto</th>'
-        '<th>Tutor</th>'
-        '<th>Data</th>'
-        '<th>Ocupação</th>'
-        '<th>Localização</th>'
-        '</tr>')
-        for activity in activities:
-            html_output += '<tr>'
-            html_output += (
-                f'<th>{activity.subject}</th>'
-                f'<th>{activity.tutor}</th>'
-                f'<th>{activity.startDate}</th>'
-                f'<th>{activity.slotsOccupied}/{activity.slots}</th>'
-                f'<th>{activity.meetingPlace}</th>'
-            )
-            html_output += '</tr>'
-        html_output += '</table>'
-        return html_output
+        return render_activities(activities)
 
     return render_template('activities.html')
+
+
+def render_activities(activities: List[Activity]):
+    html_output = ('<table><tr>'
+    '<th>Assunto</th>'
+    '<th>Tutor</th>'
+    '<th>Data</th>'
+    '<th>Ocupação</th>'
+    '<th>Localização</th>'
+    '</tr>')
+    for activity in activities:
+        html_output += '<tr>'
+        html_output += (
+            f'<th>{activity.subject}</th>'
+            f'<th>{activity.tutor}</th>'
+            f'<th>{activity.startDate}</th>'
+            f'<th>{activity.slotsOccupied}/{activity.slots}</th>'
+            f'<th>{activity.meetingPlace}</th>'
+        )
+        html_output += '</tr>'
+    html_output += '</table>'
+    return html_output    
+
 
 if __name__ == "__main__":
     app.run()
