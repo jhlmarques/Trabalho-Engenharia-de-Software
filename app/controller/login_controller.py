@@ -1,11 +1,5 @@
-from .database_controller import DatabaseController
-from typing import NamedTuple
-
-class LoginInfo(NamedTuple):
-    username : str
-    realName : str
-    roleName : str
-    roleId : int
+from controller.database_controller import DatabaseController
+from model.models import LoginInfo
 
 
 class LoginController:

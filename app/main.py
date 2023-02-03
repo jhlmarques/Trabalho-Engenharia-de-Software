@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, session
-from controller.login_controller import LoginController, LoginInfo
-from controller.schedule_controller import ScheduleController, Activity
+from controller.login_controller import LoginController
+from controller.schedule_controller import ScheduleController
+from model.models import Activity
 from typing import List
 
 app = Flask(__name__)

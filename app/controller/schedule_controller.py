@@ -1,15 +1,6 @@
-from .database_controller import DatabaseController
-from .login_controller import LoginInfo
-from typing import NamedTuple
-from datetime import datetime
+from controller.database_controller import DatabaseController
+from model.models import Activity, LoginInfo
 
-class Activity(NamedTuple):
-    subject : str
-    tutor : str
-    startDate : datetime
-    slots : int
-    slotsOccupied : int
-    meetingPlace : str
 
 
 class ScheduleController:
@@ -50,3 +41,5 @@ class ScheduleController:
             for i in range(len(table_rows[:]))
         ]
         return activities
+
+    
