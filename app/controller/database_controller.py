@@ -18,6 +18,7 @@ class DatabaseController:
     def _close_connection(self):
         if self.conn is not None:
             self.conn.close()
+            self.conn = None
 
     def execute_query(self, query):
         self._open_connection()
