@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, session
-from controller.login_controller import LoginController
+from controller.login_controller import LoginController, LoginInfo
+from controller.schedule_controller import ScheduleController
 
 app = Flask(__name__)
 
@@ -35,6 +36,36 @@ def login():
 
 @app.route("/activities", methods=["GET", "POST"])
 def activities():
+    if request.method == "GET":
+        controller = ScheduleController()
+        loginInfo = LoginInfo(
+        session['username'],
+        session['realName'],
+        session['roleId'],
+        session['roleName']
+        )
+        
+        activities = controller.getUserActivities(loginInfo)
+        html_output = ('<table><tr>'
+        '<th>Assunto</th>'
+        '<th>Tutor</th>'
+        '<th>Data</th>'
+        '<th>Ocupação</th>'
+        '<th>Localização</th>'
+        '</tr>')
+        for activity in activities:
+            html_output += '<tr>'
+            html_output += (
+                f'<th>{activity.subject}</th>'
+                f'<th>{activity.tutor}</th>'
+                f'<th>{activity.startDate}</th>'
+                f'<th>{activity.slotsOccupied}/{activity.slots}</th>'
+                f'<th>{activity.meetingPlace}</th>'
+            )
+            html_output += '</tr>'
+        html_output += '</table>'
+        return html_output
+
     return render_template('activities.html')
 
 if __name__ == "__main__":
