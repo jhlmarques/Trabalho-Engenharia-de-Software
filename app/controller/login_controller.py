@@ -32,14 +32,14 @@ class LoginController:
 
     def getLoginInfo(self, username):
         query = (
-            'select Username, CompleteName, Employees.RoleId, RoleName '
+            'select EmployeeId, Username, CompleteName, Employees.RoleId, RoleName '
             'FROM dbo.Employees '
             'JOIN dbo.Roles ON (Employees.RoleId = Roles.RoleId) '
             f'WHERE Username = \'{username}\''
         )
         table_rows = self.database.execute_query(query)
         if len(table_rows) > 0:
-            return LoginInfo(table_rows[0][0], table_rows[0][1], table_rows[0][2], table_rows[0][3])
+            return LoginInfo(table_rows[0][0], table_rows[0][1], table_rows[0][2], table_rows[0][3], table_rows[0][4])
         else:
             return None
 

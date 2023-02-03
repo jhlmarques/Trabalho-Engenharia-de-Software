@@ -40,15 +40,33 @@ def activities():
         l_controller = LoginController()
         loginInfo = l_controller.getLoginInfo(session['username'])
 
-        activities = s_controller.getUserActivities(loginInfo)
+        activities = s_controller.getUserAvaiableActivities(loginInfo)
         
-        return render_activities(activities)
+        return render_activities(activities, True)
+
+    elif request.method == "POST":
+        s_controller = ScheduleController()
+        l_controller = LoginController()
+        loginInfo = l_controller.getLoginInfo(session['username'])
+        
+        # Placeholder; using URL arguments
+        activity_id = request.args.get('id')
+        s_controller.subscribeUserToActivity(loginInfo, activity_id)
+
+        # Placeholder; check if the activity is removed from the table
+        activities = s_controller.getUserAvaiableActivities(loginInfo)
+        
+        return render_activities(activities, True)
 
     return render_template('activities.html')
 
 
-def render_activities(activities: List[Activity]):
-    html_output = ('<table><tr>'
+def render_activities(activities: List[Activity], subscribable : bool):
+    # Placeholder
+    html_output = ''
+
+    # Tabela de atividades
+    html_output += ('<table><tr>'
     '<th>Assunto</th>'
     '<th>Tutor</th>'
     '<th>Data</th>'
@@ -58,11 +76,13 @@ def render_activities(activities: List[Activity]):
     for activity in activities:
         html_output += '<tr>'
         html_output += (
-            f'<th>{activity.subject}</th>'
-            f'<th>{activity.tutor}</th>'
-            f'<th>{activity.startDate}</th>'
-            f'<th>{activity.slotsOccupied}/{activity.slots}</th>'
-            f'<th>{activity.meetingPlace}</th>'
+            f'<td>{activity.subject}</td>'
+            f'<td>{activity.tutor}</td>'
+            f'<td>{activity.startDate}</td>'
+            f'<td>{activity.slotsOccupied}/{activity.slots}</td>'
+            f'<td>{activity.meetingPlace}</td>'
+            f'<td><form action="/activities?id={activity.id}" method="POST"><button type="submit">Inscrever-se</button></form></td>' if subscribable
+            else ''
         )
         html_output += '</tr>'
     html_output += '</table>'

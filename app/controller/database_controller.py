@@ -30,3 +30,10 @@ class DatabaseController:
         self._close_connection()
         
         return table_rows
+
+    def execute_insert(self, insert_query):
+        self._open_connection()
+        
+        cursor = self._get_cursor()
+        cursor.execute(insert_query)
+        self.conn.commit()
