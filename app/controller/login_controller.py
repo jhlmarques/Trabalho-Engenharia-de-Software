@@ -12,7 +12,7 @@ class LoginController:
         :return: A senha do usuário, caso não haja correspondência no banco de dados ou
                  None, caso contrário
         """
-        query = Queries.query_get_user_password
+        query = Queries.query_get_user_password(username)
         table_rows = self.database.execute_query(query)
         if len(table_rows) > 0:
             return table_rows[0][0]

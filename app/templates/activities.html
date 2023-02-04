@@ -18,7 +18,7 @@
 <body>
   <nav class="navbar navbar-expand-lg navbar-light" style="margin-bottom: 2rem; background-color: #F4E7B0; box-shadow: 0px 2px 5px 2px #E9ECEF">
     <div class="container">
-      <a class="navbar-brand" href="/activities">
+      <a class="navbar-brand" href="/activities" style="color: #303030; font-weight: bold;">
         <img src="../static/icon.png" alt="Logo" width="32" height="32" class="d-inline-block align-text-cernter">
         MentorTop
       </a>
@@ -33,9 +33,20 @@
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="/tutors">Tutores</a>
           </li>
+          {% if session['role'] == 'Mentor' %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+              Criação de atividades
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="/activities/create?activityType=0">Criar Mentoria</a></li>
+              <li><a class="dropdown-item" href="/activities/create?activityType=1">Criar Workshop</a></li>
+            </ul>
+          </li>
+          {% endif %}
         </ul>
         <div class="d-flex" >
-          <div style="margin-top: 0.4rem; ">
+          <div style="margin-top: 0.4rem; color: #303030;">
             <h5>{{session['realName']}}</h5>
           </div>
           <img src="../static/user_icon.png" alt="Logo" width="40" height="40" class="d-inline-block">
@@ -46,33 +57,54 @@
       </div>
     </div>
   </nav>
+
   <div class="container">
-    <div class="d-flex">
+    <div class="text-center" style="margin-bottom: 1rem;">
+      <div class="btn-group" >
+        {% if filter != "subscribed" %}
+        <a class="btn" href="/activities?filter=available" style="color: #ededed; background-color: #685CFC; font-weight: bold;">Atividades Disponíveis</a>
+        <a class="btn" href="/activities?filter=subscribed" style="color: #303030; background-color: #EDEDED; font-weight: bold;">Atividades Agendadas</a>
+        {% endif %}
+
+        {% if filter == "subscribed" %}
+        <a class="btn" href="/activities?filter=available" style="color: #303030; background-color: #EDEDED; font-weight: bold;">Atividades Disponíveis</a>
+        <a class="btn" href="/activities?filter=subscribed" style="color: #ededed; background-color: #685CFC; font-weight: bold;">Atividades Agendadas</a>
+        {% endif %}
+      </div>
+    </div>
+  
+    <div class="row">
       {% for activity in activities %}
-      <div class="card">
-        <div class="card-header">
-          <h4>
-            {{activity.subject}}
-          </h4>
-        </div>
-        <div class="card-body">
-          <h5 class="card-title">Tutor: {{activity.tutor}}</h5>
-          <p class="card-text">
-            <ul>
-              <li>
-                Data de início: <strong>{{activity.startDate}}</strong>
-              </li>
-              <li>
-                Vagas restantes: <strong>{{activity.slotsOccupied}}/{{activity.slots}}</strong>
-              </li>
-              <li>
-                Local da atividade: <strong>{{activity.meetingPlace}}</strong>
-              </li>  
-            </ul>
-          </p>
-          <form action="/activities/{{activity.id}}" method="POST">
-            <button type="submit" class="btn btn-success">Ver mais</button>
-          </form>
+      <div class="col">
+        <div class="card" style="margin: 0.5rem; min-width: 20rem; max-width: 20rem;">
+          <div class="card-header" style="color: #ededed; background-color: #685CFC;">
+            <h4>
+              {{activity.subject}}
+            </h4>
+          </div>
+          <div class="card-body text-center" style="color: #303030; background-color: #e1deff;">
+            <div class="card-text">
+              <h5>Tutor</h5>
+              {{activity.tutor}}
+              <hr/>
+
+              <h5>Data de início</h5>
+              {{activity.startDate}}
+              <hr/>
+
+              <h5>Vagas restantes</h5>
+              {{activity.slotsOccupied}}/{{activity.slots}}
+              <hr/>
+
+              <h5>Local da atividade</h5>
+              {{activity.meetingPlace}}
+            </div> 
+          </div>
+          <div class="card-footer text-center" style="background-color: #ededed;">
+            <form action="/activities/{{activity.id}}" method="GET">
+              <button type="submit" class="btn" style="color: #fafafa;background-color: #685CFC;">Ver mais</button>
+            </form>
+          </div>
         </div>
       </div>
       {% endfor %}

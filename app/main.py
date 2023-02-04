@@ -8,6 +8,9 @@ app = Flask(__name__)
 
 app.secret_key = 'khjNejV9pKHs8PXXgIJ7R1yMmxgWZyC6'
 
+MENTORSHIP='0'
+WORKSHOP='1'
+NO_ID=0
 
 # Handles login attempts
 @app.route("/", methods=["GET", "POST"])
@@ -23,7 +26,8 @@ def login():
             loginInfo = controller.getLoginInfo(username)
             session['username'] = loginInfo.username
             session['realName'] = loginInfo.realName
-
+            session['role'] = loginInfo.roleName
+            
             return redirect("/activities")
 
     # Check if there was a valid login in this session and redirect to the main page
@@ -41,22 +45,70 @@ def activities():
         l_controller = LoginController()
         loginInfo = l_controller.getLoginInfo(session['username'])
 
-        activities = s_controller.getUserAvailableActivities(loginInfo)
+        avaiable_activities = s_controller.getUserAvailableActivities(loginInfo)
+        subscribed_activities = s_controller.getUserSubscribedActivities(loginInfo)
+        
+        filter = request.args.get('filter')
+        activities = subscribed_activities if filter == "subscribed" else avaiable_activities
+        
+        return render_template('activities.html', activities=activities, filter=filter)
+    
+    
+@app.route("/activities/<activity_id>", methods=["GET", "POST"])
+def activity_details(activity_id):
+    if request.method == "GET":
+        s_controller = ScheduleController()
+        l_controller = LoginController()
+        loginInfo = l_controller.getLoginInfo(session['username'])
+        activity = s_controller.getActivityFromId(int(activity_id))
+        is_subscribed = s_controller.isUserSubscribed(loginInfo, activity)
 
-        return render_template('activities.html', activities=activities)
+        return render_template('activity_details.html', isSubscribed=is_subscribed, activityDetails=activity)
 
     elif request.method == "POST":
         s_controller = ScheduleController()
         l_controller = LoginController()
         loginInfo = l_controller.getLoginInfo(session['username'])
-
-        # Placeholder; using URL arguments
-        activity_id = request.args.get('id')
         activity = s_controller.getActivityFromId(activity_id)
 
-        valid_subscription = s_controller.subscribeUserToActivity(loginInfo, activity)
+        subscribing = int(request.args.get('subscribing'))
+        if subscribing:
+            s_controller.subscribeUserToActivity(loginInfo, activity)
+        else:
+            s_controller.unsubscribeUserFromActivity(loginInfo, activity)
 
         return redirect('/activities')
+    
+
+@app.route("/activities/create", methods=["GET", "POST"])
+def activity_creation():
+    activity_type = request.args.get('activityType')
+    
+    if request.method == "GET":
+        s_controller = ScheduleController()
+        l_controller = LoginController()
+        loginInfo = l_controller.getLoginInfo(session['username'])
+        possible_subject = s_controller.getTutorSubjects(loginInfo)
+        return render_template('activity_creation.html', activityType=activity_type, availableSubjects=possible_subject)
+    
+    elif request.method == "POST":
+        s_controller = ScheduleController()
+        l_controller = LoginController()
+        loginInfo = l_controller.getLoginInfo(session['username'])
+
+        subject = request.form.get('subject')
+        datetime = request.form.get('date') + ' ' + request.form.get('time')
+
+        # Get the activity type; Determines default values for the activity
+        if activity_type == MENTORSHIP:
+            s_controller.addNewMentorship(loginInfo, subject, datetime)
+        else:
+            meeting_place = request.form.get('meetingPlace')
+            slots = request.form.get('slots')
+            s_controller.addNewWorkshop(loginInfo, subject, datetime, meeting_place, slots)
+
+        return redirect('/activities')
+
 
 
 @app.route("/tutors", methods=["GET"])
