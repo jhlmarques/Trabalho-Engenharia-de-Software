@@ -52,7 +52,7 @@ class Queries:
         '    FROM ActivityAllocation '
         '    JOIN Employees ON (ActivityAllocation.EmployeeId = Employees.EmployeeId) '
         f'   WHERE Employees.username = \'{login.username}\' '
-        ') OR ActivityAllocation.ActivityId IS NULL '
+        ')'
         'GROUP BY '
         'Activities.ActivityId, '
         'Subjects.SubjectName, '

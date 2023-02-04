@@ -27,7 +27,8 @@ class ScheduleController:
         table_rows = self.database.execute_query(query)
         activities = []
         for i in range(len(table_rows[:])):
-            if login.realName != table_rows[i][2]:
+            # Tutors can't see their own activities, and full activities can't be subscribed
+            if (login.realName != table_rows[i][4]) and (table_rows[i][7] < table_rows[i][6]):
                 activities.append(Activity(*table_rows[i]))
 
         return activities
