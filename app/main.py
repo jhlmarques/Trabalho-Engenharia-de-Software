@@ -43,7 +43,7 @@ def activities():
 
         activities = s_controller.getUserAvaiableActivities(loginInfo)
         
-        return render_template('activities.html')
+        return render_template('activities.html', activities=activities)
 
     elif request.method == "POST":
         s_controller = ScheduleController()
@@ -55,10 +55,7 @@ def activities():
         activity = s_controller.getActivityFromId(activity_id)
         s_controller.subscribeUserToActivity(loginInfo, activity)
 
-        # Placeholder; check if the activity is removed from the table
-        activities = s_controller.getUserAvaiableActivities(loginInfo)
-        
-        return render_template('activities.html')
+        return redirect('/activities')
 
 @app.route("/tutors", methods=["GET"])
 def tutors():

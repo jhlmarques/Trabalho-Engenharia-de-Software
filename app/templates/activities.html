@@ -47,12 +47,35 @@
     </div>
   </nav>
   <div class="container">
-    <div class="card" style="width: 18rem;">
-      <ul class="list-group list-group-flush">
-        <li class="list-group-item">An item</li>
-        <li class="list-group-item">A second item</li>
-        <li class="list-group-item">A third item</li>
-      </ul>
+    <div class="d-flex">
+      {% for activity in activities %}
+      <div class="card">
+        <div class="card-header">
+          <h4>
+            {{activity.subject}}
+          </h4>
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">Tutor: {{activity.tutor}}</h5>
+          <p class="card-text">
+            <ul>
+              <li>
+                Data de início: <strong>{{activity.startDate}}</strong>
+              </li>
+              <li>
+                Vagas restantes: <strong>{{activity.slotsOccupied}}/{{activity.slots}}</strong>
+              </li>
+              <li>
+                Local da atividade: <strong>{{activity.meetingPlace}}</strong>
+              </li>  
+            </ul>
+          </p>
+          <form action="/activities/{{activity.id}}" method="POST">
+            <button type="submit" class="btn btn-success">Ver mais</button>
+          </form>
+        </div>
+      </div>
+      {% endfor %}
     </div>
   </div>
   
