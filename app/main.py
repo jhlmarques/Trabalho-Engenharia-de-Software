@@ -12,6 +12,9 @@ MENTORSHIP='0'
 WORKSHOP='1'
 NO_ID=0
 
+def isLoggedIn():
+    return 'username' in session
+
 # Handles login attempts
 @app.route("/", methods=["GET", "POST"])
 def login():
@@ -38,9 +41,12 @@ def login():
     return render_template('login.html')
 
 
-@app.route("/activities", methods=["GET", "POST"])
+@app.route("/activities", methods=["GET"])
 def activities():
     if request.method == "GET":
+        if not isLoggedIn():
+            return redirect('/')
+
         s_controller = ScheduleController()
         l_controller = LoginController()
         loginInfo = l_controller.getLoginInfo(session['username'])
@@ -57,6 +63,9 @@ def activities():
 @app.route("/activities/<activity_id>", methods=["GET", "POST"])
 def activity_details(activity_id):
     if request.method == "GET":
+        if not isLoggedIn():
+            return redirect('/')
+
         s_controller = ScheduleController()
         l_controller = LoginController()
         loginInfo = l_controller.getLoginInfo(session['username'])
@@ -66,10 +75,13 @@ def activity_details(activity_id):
         return render_template('activity_details.html', isSubscribed=is_subscribed, activityDetails=activity)
 
     elif request.method == "POST":
+        if not isLoggedIn():
+            return redirect('/')
+
         s_controller = ScheduleController()
         l_controller = LoginController()
         loginInfo = l_controller.getLoginInfo(session['username'])
-        activity = s_controller.getActivityFromId(activity_id)
+        activity = s_controller.getActivityFromId(int(activity_id))
 
         subscribing = int(request.args.get('subscribing'))
         if subscribing:
@@ -85,13 +97,26 @@ def activity_creation():
     activity_type = request.args.get('activityType')
     
     if request.method == "GET":
+        if not isLoggedIn():
+            return redirect('/')
+
         s_controller = ScheduleController()
         l_controller = LoginController()
         loginInfo = l_controller.getLoginInfo(session['username'])
+        
+        if loginInfo.roleName != 'Mentor':
+            return redirect('/activities')
+
         possible_subject = s_controller.getTutorSubjects(loginInfo)
         return render_template('activity_creation.html', activityType=activity_type, availableSubjects=possible_subject)
     
     elif request.method == "POST":
+        if not isLoggedIn():
+            return redirect('/')
+
+        if loginInfo.roleName != 'Mentor':
+            return redirect('/activities')
+
         s_controller = ScheduleController()
         l_controller = LoginController()
         loginInfo = l_controller.getLoginInfo(session['username'])
