@@ -51,7 +51,8 @@ def activities():
         
         # Placeholder; using URL arguments
         activity_id = request.args.get('id')
-        s_controller.subscribeUserToActivity(loginInfo, activity_id)
+        activity = s_controller.getActivityFromId(activity_id)
+        s_controller.subscribeUserToActivity(loginInfo, activity)
 
         # Placeholder; check if the activity is removed from the table
         activities = s_controller.getUserAvaiableActivities(loginInfo)
