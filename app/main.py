@@ -114,13 +114,13 @@ def activity_creation():
         if not isLoggedIn():
             return redirect('/')
 
-        if loginInfo.roleName != 'Mentor':
-            return redirect('/activities')
-
         s_controller = ScheduleController()
         l_controller = LoginController()
         loginInfo = l_controller.getLoginInfo(session['username'])
 
+        if loginInfo.roleName != 'Mentor':
+            return redirect('/activities')
+            
         subject = request.form.get('subject')
         datetime = request.form.get('date') + ' ' + request.form.get('time')
 
