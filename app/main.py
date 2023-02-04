@@ -23,14 +23,14 @@ def login():
             loginInfo = controller.getLoginInfo(username)
             session['username'] = loginInfo.username
             session['realName'] = loginInfo.realName
-            
+
             return redirect("/activities")
 
     # Check if there was a valid login in this session and redirect to the main page
     elif request.method == "GET":
         if('username' in session):
             return redirect("/activities")
-       
+
     return render_template('login.html')
 
 
@@ -41,21 +41,23 @@ def activities():
         l_controller = LoginController()
         loginInfo = l_controller.getLoginInfo(session['username'])
 
-        activities = s_controller.getUserAvaiableActivities(loginInfo)
-        
+        activities = s_controller.getUserAvailableActivities(loginInfo)
+
         return render_template('activities.html', activities=activities)
 
     elif request.method == "POST":
         s_controller = ScheduleController()
         l_controller = LoginController()
         loginInfo = l_controller.getLoginInfo(session['username'])
-        
+
         # Placeholder; using URL arguments
         activity_id = request.args.get('id')
         activity = s_controller.getActivityFromId(activity_id)
-        s_controller.subscribeUserToActivity(loginInfo, activity)
+
+        valid_subscription = s_controller.subscribeUserToActivity(loginInfo, activity)
 
         return redirect('/activities')
+
 
 @app.route("/tutors", methods=["GET"])
 def tutors():

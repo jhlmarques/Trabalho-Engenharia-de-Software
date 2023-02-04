@@ -1,26 +1,23 @@
 from controller.database_controller import DatabaseController
 from model.models import LoginInfo
-
+from controller.queries_sql import Queries
 
 class LoginController:
     def __init__(self):
         self.database = DatabaseController()
-    
-    
+
     def _get_user_password(self, username):
         """
         :param username: Username do usuário
         :return: A senha do usuário, caso não haja correspondência no banco de dados ou
                  None, caso contrário
         """
-        
-        query = f'select Password from dbo.Employees where Username = \'{username}\''
+        query = Queries.query_get_user_password
         table_rows = self.database.execute_query(query)
         if len(table_rows) > 0:
             return table_rows[0][0]
         else:
             return None
-    
     
     def authenticate_user(self, username, password):
         db_password = self._get_user_password(username)
@@ -31,15 +28,10 @@ class LoginController:
             return False
 
     def getLoginInfo(self, username):
-        query = (
-            'select EmployeeId, Username, CompleteName, Employees.RoleId, RoleName '
-            'FROM dbo.Employees '
-            'JOIN dbo.Roles ON (Employees.RoleId = Roles.RoleId) '
-            f'WHERE Username = \'{username}\''
-        )
+        query = Queries.query_getLoginInfo(username)
         table_rows = self.database.execute_query(query)
         if len(table_rows) > 0:
-            return LoginInfo(table_rows[0][0], table_rows[0][1], table_rows[0][2], table_rows[0][3], table_rows[0][4])
+            return LoginInfo(*table_rows[0])
         else:
             return None
 
