@@ -22,6 +22,7 @@ def login():
         if is_authenticated:
             loginInfo = controller.getLoginInfo(username)
             session['username'] = loginInfo.username
+            session['realName'] = loginInfo.realName
             
             return redirect("/activities")
 
@@ -42,7 +43,7 @@ def activities():
 
         activities = s_controller.getUserAvaiableActivities(loginInfo)
         
-        return render_activities(activities, True)
+        return render_template('activities.html')
 
     elif request.method == "POST":
         s_controller = ScheduleController()
@@ -57,37 +58,17 @@ def activities():
         # Placeholder; check if the activity is removed from the table
         activities = s_controller.getUserAvaiableActivities(loginInfo)
         
-        return render_activities(activities, True)
+        return render_template('activities.html')
 
-    return render_template('activities.html')
+@app.route("/tutors", methods=["GET"])
+def tutors():
+    return render_template('tutors.html')
 
 
-def render_activities(activities: List[Activity], subscribable : bool):
-    # Placeholder
-    html_output = ''
-
-    # Tabela de atividades
-    html_output += ('<table><tr>'
-    '<th>Assunto</th>'
-    '<th>Tutor</th>'
-    '<th>Data</th>'
-    '<th>Ocupação</th>'
-    '<th>Localização</th>'
-    '</tr>')
-    for activity in activities:
-        html_output += '<tr>'
-        html_output += (
-            f'<td>{activity.subject}</td>'
-            f'<td>{activity.tutor}</td>'
-            f'<td>{activity.startDate}</td>'
-            f'<td>{activity.slotsOccupied}/{activity.slots}</td>'
-            f'<td>{activity.meetingPlace}</td>'
-            f'<td><form action="/activities?id={activity.id}" method="POST"><button type="submit">Inscrever-se</button></form></td>' if subscribable
-            else ''
-        )
-        html_output += '</tr>'
-    html_output += '</table>'
-    return html_output    
+@app.route("/logout", methods=["POST"])
+def logout():
+    session.pop('username', None)
+    return redirect('/')
 
 
 if __name__ == "__main__":
