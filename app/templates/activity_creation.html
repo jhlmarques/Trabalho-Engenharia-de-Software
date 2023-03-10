@@ -1,63 +1,9 @@
-<!DOCTYPE html>
+{% extends 'base.html' %}
+{% block title %}
+Atividades
+{% endblock %}
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-
-<head>
-    <meta charset="utf-8" />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <base href="/">
-
-    <link rel="shortcut icon" type="image/ico" href="../static/favicon.ico">
-    <title>Atividades</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-</head>
-
-<body>
-  <nav class="navbar navbar-expand-lg navbar-light" style="margin-bottom: 2rem; background-color: #F4E7B0; box-shadow: 0px 2px 5px 2px #E9ECEF">
-    <div class="container">
-      <a class="navbar-brand" href="/activities" style="color: #303030; font-weight: bold;">
-        <img src="../static/icon.png" alt="Logo" width="32" height="32" class="d-inline-block align-text-cernter">
-        MentorTop
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/activities">Atividades</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/tutors">Tutores</a>
-          </li>
-          {% if session['role'] == 'Mentor' %}
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-              Criação de atividades
-            </a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="/activities/create?activityType=0">Criar Mentoria</a></li>
-              <li><a class="dropdown-item" href="/activities/create?activityType=1">Criar Workshop</a></li>
-            </ul>
-          </li>
-          {% endif %}
-        </ul>
-        <div class="d-flex" >
-          <div style="margin-top: 0.4rem; color: #303030;">
-            <h5>{{session['realName']}}</h5>
-          </div>
-          <img src="../static/user_icon.png" alt="Logo" width="40" height="40" class="d-inline-block">
-          <form action="/logout" method="POST">
-            <button class="btn btn-default" type="submit" style="color: #ff653b; font-weight: bolder;">Sair</button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </nav>
-
+{% block content %}
   <div class="container">
     {% if activityType == '0' %}
     <form action="/activities/create?activityType=0" method="POST">
@@ -118,10 +64,5 @@
       </div>
     </form>
     {% endif %}
-
   </div>
-  
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
-</body>
-
-</html>
+{% endblock %}
