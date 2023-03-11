@@ -4,17 +4,15 @@ Atividades
 {% endblock %}
 
 {% block content %}
-  <div class="container">
-    {% if isSubscribed %}
-    <form action="/activities/{{activityDetails.id}}?subscribing=0" method="POST">
-      <button type="submit" class="btn" style="color: #FAFAFA; background-color: #FF653B;">Cancelar Inscrição</button>
-    </form>
-    {% endif %}
+  {% if isSubscribed %}
+  <form action="/activities/{{activityDetails.id}}?subscribing=0" method="POST">
+    <button type="submit" class="btn" style="color: #FAFAFA; background-color: #FF653B;">Cancelar Inscrição</button>
+  </form>
+  {% endif %}
 
-    {% if not isSubscribed %}
-    <form action="/activities/{{activityDetails.id}}?subscribing=1" method="POST">
-      <button type="submit" class="btn" style="color: #FAFAFA; background-color: #685CFC ;">Inscrever-se</button>
-    </form>
-    {% endif %}
-  </div>
+  {% if not isSubscribed %}
+  <form action="/activities/{{activityDetails.id}}?subscribing=1" method="POST">
+    <button type="submit" class="btn" style="color: #FAFAFA; background-color: #685CFC ;">Inscrever-se</button>
+  </form>
+  {% endif %}
 {% endblock %}

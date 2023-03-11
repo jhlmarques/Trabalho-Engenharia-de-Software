@@ -4,65 +4,63 @@ Atividades
 {% endblock %}
 
 {% block content %}
-  <div class="container">
-    {% if activityType == '0' %}
-    <form action="/activities/create?activityType=0" method="POST">
-      <div class="input-group" style="margin-bottom: 1.5rem">
-        <label class="input-group-text" >Assunto</label>
-        <select name="subject" class="form-select" >
-          {% for subject in availableSubjects %}
-          <option>{{subject.name}}</option>
-          {% endfor %}
-        </select>
+  {% if activityType == '0' %}
+  <form action="/activities/create?activityType=0" method="POST">
+    <div class="input-group" style="margin-bottom: 1.5rem">
+      <label class="input-group-text" >Assunto</label>
+      <select name="subject" class="form-select" >
+        {% for subject in availableSubjects %}
+        <option>{{subject.name}}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="row" style="margin-bottom: 1.5rem">
+      <div class="col">
+        <label class="form-label">Dia no formato <strong>AAAAMMDD</strong></label>
+        <input name="date" type="text" class="form-control" placeholder="AAAAMMDD">
       </div>
-      <div class="row" style="margin-bottom: 1.5rem">
-        <div class="col">
-          <label class="form-label">Dia no formato <strong>AAAAMMDD</strong></label>
-          <input name="date" type="text" class="form-control" placeholder="AAAAMMDD">
-        </div>
-        <div class="col">
-          <label class="form-label">Horário no formato <strong>HH:MM:SS</strong></label>
-          <input name="time" type="text" class="form-control" placeholder="HH:MM:SS">
-        </div>
+      <div class="col">
+        <label class="form-label">Horário no formato <strong>HH:MM:SS</strong></label>
+        <input name="time" type="text" class="form-control" placeholder="HH:MM:SS">
       </div>
-      <div>
-        <button type="submit" class="btn mb-3" style="color: #ededed; background-color: #685CFC; font-weight: bold;">Criar atividade</button>
-      </div>
-    </form>
-    {% endif %}
+    </div>
+    <div>
+      <button type="submit" class="btn mb-3" style="color: #ededed; background-color: #685CFC; font-weight: bold;">Criar atividade</button>
+    </div>
+  </form>
+  {% endif %}
 
-    {% if activityType == '1' %}
-    <form action="/activities/create?activityType=1" method="POST">
-      <div class="input-group" style="margin-bottom: 1.5rem">
-        <label class="input-group-text" >Assunto</label>
-        <select name="subject" class="form-select" >
-          {% for subject in availableSubjects %}
-          <option>{{subject.name}}</option>
-          {% endfor %}
-        </select>
+  {% if activityType == '1' %}
+  <form action="/activities/create?activityType=1" method="POST">
+    <div class="input-group" style="margin-bottom: 1.5rem">
+      <label class="input-group-text" >Assunto</label>
+      <select name="subject" class="form-select" >
+        {% for subject in availableSubjects %}
+        <option>{{subject.name}}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="row" style="margin-bottom: 1.5rem">
+      <div class="col">
+        <label class="form-label">Dia no formato <strong>AAAAMMDD</strong></label>
+        <input name="date" type="text" class="form-control" placeholder="AAAAMMDD">
       </div>
-      <div class="row" style="margin-bottom: 1.5rem">
-        <div class="col">
-          <label class="form-label">Dia no formato <strong>AAAAMMDD</strong></label>
-          <input name="date" type="text" class="form-control" placeholder="AAAAMMDD">
-        </div>
-        <div class="col">
-          <label class="form-label">Horário no formato <strong>HH:MM:SS</strong></label>
-          <input name="time" type="text" class="form-control" placeholder="HH:MM:SS">
-        </div>
+      <div class="col">
+        <label class="form-label">Horário no formato <strong>HH:MM:SS</strong></label>
+        <input name="time" type="text" class="form-control" placeholder="HH:MM:SS">
       </div>
-      <div style="margin-bottom: 1.5rem">
-        <label class="form-label">Local do Workshop</label>
-        <input name="meetingPlace" type="text" class="form-control" placeholder="Local">
-      </div>
-      <div style="margin-bottom: 1.5rem">
-        <label class="form-label">Quantidade de Lugares Disponíveis</label>
-        <input name="slots" type="number" class="form-control" placeholder="Quantidade">
-      </div>
-      <div>
-        <button type="submit" class="btn mb-3" style="color: #ededed; background-color: #685CFC; font-weight: bold;">Criar atividade</button>
-      </div>
-    </form>
-    {% endif %}
-  </div>
+    </div>
+    <div style="margin-bottom: 1.5rem">
+      <label class="form-label">Local do Workshop</label>
+      <input name="meetingPlace" type="text" class="form-control" placeholder="Local">
+    </div>
+    <div style="margin-bottom: 1.5rem">
+      <label class="form-label">Quantidade de Lugares Disponíveis</label>
+      <input name="slots" type="number" class="form-control" placeholder="Quantidade">
+    </div>
+    <div>
+      <button type="submit" class="btn mb-3" style="color: #ededed; background-color: #685CFC; font-weight: bold;">Criar atividade</button>
+    </div>
+  </form>
+  {% endif %}
 {% endblock %}
