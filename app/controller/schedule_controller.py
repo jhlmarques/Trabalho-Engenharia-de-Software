@@ -101,3 +101,18 @@ class ScheduleController:
             r_list.append(subject)
 
         return r_list
+
+    def get_tutors_info(self):
+        query = (
+            'SELECT CompleteName, SubjectName '
+            'FROM Employees JOIN TutorSubjects ON (Employees.EmployeeId = TutorSubjects.TutorId) '
+            'JOIN Subjects ON (TutorSubjects.SubjectId = Subjects.SubjectId)'
+        )
+        table_rows = self.database.execute_query(query)
+        tutor_subject_dict = {}
+        for tutor_name, subject in table_rows:
+            if tutor_name not in tutor_subject_dict:
+                tutor_subject_dict[tutor_name] = [subject]
+            else:
+                tutor_subject_dict[tutor_name].append(subject)
+        return tutor_subject_dict

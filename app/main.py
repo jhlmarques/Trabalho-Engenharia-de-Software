@@ -43,84 +43,64 @@ def login():
 
 @app.route("/activities", methods=["GET"])
 def activities():
-    if request.method == "GET":
-        if not isLoggedIn():
-            return redirect('/')
+    if not isLoggedIn():
+        return redirect('/')
 
+    if request.method == "GET":
         s_controller = ScheduleController()
         l_controller = LoginController()
         loginInfo = l_controller.getLoginInfo(session['username'])
 
         avaiable_activities = s_controller.getUserAvailableActivities(loginInfo)
         subscribed_activities = s_controller.getUserSubscribedActivities(loginInfo)
-        
+
         filter = request.args.get('filter')
         activities = subscribed_activities if filter == "subscribed" else avaiable_activities
-        
+
         return render_template('activities.html', activities=activities, filter=filter)
     
     
 @app.route("/activities/<activity_id>", methods=["GET", "POST"])
 def activity_details(activity_id):
+    if not isLoggedIn():
+        return redirect('/')
+
+    s_controller = ScheduleController()
+    l_controller = LoginController()
+    loginInfo = l_controller.getLoginInfo(session['username'])
+    activity = s_controller.getActivityFromId(int(activity_id))
+
     if request.method == "GET":
-        if not isLoggedIn():
-            return redirect('/')
-
-        s_controller = ScheduleController()
-        l_controller = LoginController()
-        loginInfo = l_controller.getLoginInfo(session['username'])
-        activity = s_controller.getActivityFromId(int(activity_id))
         is_subscribed = s_controller.isUserSubscribed(loginInfo, activity)
-
         return render_template('activity_details.html', isSubscribed=is_subscribed, activityDetails=activity)
 
     elif request.method == "POST":
-        if not isLoggedIn():
-            return redirect('/')
-
-        s_controller = ScheduleController()
-        l_controller = LoginController()
-        loginInfo = l_controller.getLoginInfo(session['username'])
-        activity = s_controller.getActivityFromId(int(activity_id))
-
         subscribing = int(request.args.get('subscribing'))
         if subscribing:
             s_controller.subscribeUserToActivity(loginInfo, activity)
         else:
             s_controller.unsubscribeUserFromActivity(loginInfo, activity)
-
         return redirect('/activities')
     
 
 @app.route("/activities/create", methods=["GET", "POST"])
 def activity_creation():
+    if not isLoggedIn():
+        return redirect('/')
+
     activity_type = request.args.get('activityType')
-    
+    s_controller = ScheduleController()
+    l_controller = LoginController()
+    loginInfo = l_controller.getLoginInfo(session['username'])
+
+    if loginInfo.roleName != 'Mentor':
+        return redirect('/activities')
+
     if request.method == "GET":
-        if not isLoggedIn():
-            return redirect('/')
-
-        s_controller = ScheduleController()
-        l_controller = LoginController()
-        loginInfo = l_controller.getLoginInfo(session['username'])
-        
-        if loginInfo.roleName != 'Mentor':
-            return redirect('/activities')
-
         possible_subject = s_controller.getTutorSubjects(loginInfo)
         return render_template('activity_creation.html', activityType=activity_type, availableSubjects=possible_subject)
     
     elif request.method == "POST":
-        if not isLoggedIn():
-            return redirect('/')
-
-        s_controller = ScheduleController()
-        l_controller = LoginController()
-        loginInfo = l_controller.getLoginInfo(session['username'])
-
-        if loginInfo.roleName != 'Mentor':
-            return redirect('/activities')
-            
         subject = request.form.get('subject')
         datetime = request.form.get('date') + ' ' + request.form.get('time')
 
@@ -130,15 +110,20 @@ def activity_creation():
         else:
             meeting_place = request.form.get('meetingPlace')
             slots = request.form.get('slots')
-            s_controller.addNewWorkshop(loginInfo, subject, datetime, meeting_place, slots)
+            s_controller.addNewWorkshop(loginInfo, subject, datetime, meeting_place, int(slots))
 
         return redirect('/activities')
 
 
-
-@app.route("/tutors", methods=["GET"])
+@app.route("/tutors")
 def tutors():
-    return render_template('tutors.html')
+    if not isLoggedIn():
+        return redirect('/')
+
+    s_controller = ScheduleController()
+    tutor_info = s_controller.get_tutors_info()
+
+    return render_template('tutors.html', tutor_info=tutor_info)
 
 
 @app.route("/logout", methods=["POST"])
@@ -149,3 +134,4 @@ def logout():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
