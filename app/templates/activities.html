@@ -3,8 +3,16 @@
 Atividades
 {% endblock %}
 
+{% block scripts %}
+<script>
+  function formatDate(date){
+
+  }
+</script>
+{% endblock %}
+
 {% block content %}
-  <div class="text-center" style="margin-bottom: 1rem;">
+  <div class="d-flex justify-content-center mb-3">
     <div class="btn-group" >
       {% if filter != "subscribed" %}
       <a class="btn primary-button" href="/activities?filter=available">Atividades Disponíveis</a>
@@ -20,37 +28,39 @@ Atividades
 
   <div class="row">
     {% for activity in activities %}
-    <div class="col">
-      <div class="card" style="margin: 0.5rem; min-width: 20rem; max-width: 20rem;">
-        <div class="card-header" style="color: #ededed; background-color: #685CFC;">
-          <h4>
-            {{activity.subject}}
-          </h4>
+      <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+        <div class="card">
+          <div class="card-header card-title text-center">
+            <h4>
+              {{activity.subject}}
+            </h4>
+          </div>
+          <div class="card-body text-center card-content">
+            <div class="card-text">
+              <h5>Tutor</h5>
+              {{activity.tutor}}
+              <hr/>
+              
+              <h5>Data de início</h5>
+              <div id="activityDate">
+                {{activity.startDate}}
+              </div>
+              <hr/>
+              
+              <h5>Vagas restantes</h5>
+              {{activity.slotsOccupied}}/{{activity.slots}}
+              <hr/>
+              
+              <h5>Local da atividade</h5>
+              {{activity.meetingPlace}}
+            </div> 
+          </div>
+          <div class="card-footer text-center card-content">
+            <form action="/activities/{{activity.id}}" method="GET">
+              <button type="submit" class="btn primary-button">Ver mais</button>
+            </form>
+          </div>
         </div>
-        <div class="card-body text-center" style="color: #303030; background-color: #e1deff;">
-          <div class="card-text">
-            <h5>Tutor</h5>
-            {{activity.tutor}}
-            <hr/>
-
-            <h5>Data de início</h5>
-            {{activity.startDate}}
-            <hr/>
-
-            <h5>Vagas restantes</h5>
-            {{activity.slotsOccupied}}/{{activity.slots}}
-            <hr/>
-
-            <h5>Local da atividade</h5>
-            {{activity.meetingPlace}}
-          </div> 
-        </div>
-        <div class="card-footer text-center" style="background-color: #ededed;">
-          <form action="/activities/{{activity.id}}" method="GET">
-            <button type="submit" class="btn primary-button">Ver mais</button>
-          </form>
-        </div>
-      </div>
     </div>
     {% endfor %}
   </div>

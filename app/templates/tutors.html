@@ -4,41 +4,29 @@ Tutores
 {% endblock %}
 
 {% block content %}
-  <div class="container">
-    <div class="text-center" style="margin-bottom: 1rem;">
-<!--      <div class="btn-group" >-->
-<!--        <div class="card" style="margin: 0.5rem; width: 18rem;">-->
-<!--          <img src="../static/Mestre.jpg" class="card-img-top" alt="...">-->
-<!--          <div class="card-body">-->
-<!--            <h5 class="card-title">Grandíssimo mestre</h5>-->
-<!--            <p class="card-text">Esse é o nosso melhor tutor da empresa, ninguém até hoje conseguiu fazer melhor que ele. Confia!</p>-->
-<!--            <a href="https://www.inf.ufrgs.br/~dgbalreira/" target="_blank" class="btn btn-primary">Ir pra página dele</a>-->
-<!--          </div>-->
-<!--        </div>-->
-      <div class="row">
-        {% for tutor in tutor_info %}
-        <div class="col">
-          <div class="card" style="margin: 0.5rem; min-width: 20rem; max-width: 25rem;">
-            <div class="card-header" style="color: #ededed; background-color: #685CFC;">
-              <h4>
-                {{tutor}}
-              </h4>
-            </div>
-            <div class="card-body text-center" style="color: #303030; background-color: #e1deff;">
-              <div class="card-text">
-                <h5>Áreas lecionadas</h5>
-                <hr/>
-                {% for area in tutor_info[tutor] %}
-                {{"- " + area}}
-                <br/>
-                {% endfor %}
-              </div>
+  <div class="row">
+    {% for tutor in tutor_info %}
+      <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+        <div class="card">
+          <div class="card-header card-title text-center">
+            <h4>
+              {{tutor}}
+            </h4>
+          </div>
+          <div class="card-body text-center card-content">
+            <div class="card-text">
+              <h5>Áreas lecionadas</h5>
             </div>
           </div>
+          <ul class="list-group list-group-flush card-content">
+            {% for area in tutor_info[tutor] %}
+              <li class="list-group-item card-content text-center card-list">
+                {{area}}
+              </li>
+            {% endfor %}
+          </ul>
         </div>
-        {% endfor %}
       </div>
-    </div>
+    {% endfor %}
   </div>
-
 {% endblock %}

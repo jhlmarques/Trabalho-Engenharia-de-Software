@@ -12,7 +12,7 @@
 
         <link rel="shortcut icon" type="image/ico" href="../static/favicon.ico">
         
-        <title>
+        <title> 
             {% block title %}
             {% endblock %}
         </title>
@@ -22,13 +22,14 @@
         
         <!--  Load CSS in Flask with html-->
         <link rel="stylesheet" href='/static/app.css'/>  
+        <script src="/static/scripts.js"></script>
     </head>
     <body>
     <!-- Navbar here -->
     <div class="background">
-      <nav class="navbar navbar-expand-lg navbar-light" style="margin-bottom: 2rem; background-color: #F4E7B0; box-shadow: 0px 2px 5px 2px #E9ECEF">
+      <nav class="navbar navbar-expand-lg navbar-light navbar">
         <div class="container">
-          <a class="navbar-brand" href="/activities" style="color: #303030; font-weight: bold;">
+          <a class="navbar-brand navbar-logo" href="/activities">
             <img src="../static/icon.png" alt="Logo" width="32" height="32" class="d-inline-block align-text-cernter">
             MentorTop
           </a>
@@ -38,14 +39,14 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/activities">Atividades</a>
+                <a class="nav-link active navbar-item" aria-current="page" href="/activities">Atividades</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/tutors">Tutores</a>
+                <a class="nav-link active navbar-item" aria-current="page" href="/tutors">Tutores</a>
               </li>
               {% if session['role'] == 'Mentor' %}
               <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                <a class="nav-link dropdown-toggle navbar-item" href="#" role="button" data-bs-toggle="dropdown">
                   Criação de atividades
                 </a>
                 <ul class="dropdown-menu">
@@ -56,7 +57,7 @@
               {% endif %}
             </ul>
             <div class="d-flex" >
-              <div style="margin-top: 0.4rem; color: #303030;">
+              <div class="navbar-name">
                 <h5>{{session['realName']}}</h5>
               </div>
               <img src="../static/user_icon.png" alt="Logo" width="40" height="40" class="d-inline-block">
