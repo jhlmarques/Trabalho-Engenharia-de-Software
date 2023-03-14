@@ -131,6 +131,10 @@ def logout():
     session.pop('username', None)
     return redirect('/')
 
+@app.template_filter('format_date')
+def format_date_filter(date):
+    formated_date = str(date).replace("-", "/").replace(" ", ", às ").replace(":", "h ", 1).replace(":", "m", 1)[:-2]
+    return formated_date
 
 if __name__ == "__main__":
     app.run(debug=True)
