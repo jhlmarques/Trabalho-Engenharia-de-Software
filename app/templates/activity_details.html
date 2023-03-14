@@ -4,15 +4,51 @@ Atividades
 {% endblock %}
 
 {% block content %}
-  {% if isSubscribed %}
-  <form action="/activities/{{activityDetails.id}}?subscribing=0" method="POST">
-    <button type="submit" class="btn" style="color: #FAFAFA; background-color: #FF653B;">Cancelar Inscrição</button>
-  </form>
-  {% endif %}
 
-  {% if not isSubscribed %}
-  <form action="/activities/{{activityDetails.id}}?subscribing=1" method="POST">
-    <button type="submit" class="btn" style="color: #FAFAFA; background-color: #685CFC ;">Inscrever-se</button>
-  </form>
-  {% endif %}
+<div class="d-flex justify-content-center">
+  <div class="col-lg-4">
+    <div class="card">
+      <div class="card-header card-title text-center">
+        <h4>
+          {{activityDetails.subject}}
+        </h4>
+      </div>
+      <div class="card-body text-center card-content">
+        <div class="card-text">
+          <h5>Tutor</h5>
+          {{activityDetails.tutor}}
+          <hr/>
+          
+          <h5>Data de início</h5>
+          <div id="activityDate">
+            {{activityDetails.startDate | format_date}}
+          </div>
+          <hr/>
+          
+          <h5>Vagas restantes</h5>
+          {{activityDetails.slotsOccupied}}/{{activityDetails.slots}}
+          <hr/>
+          
+          <h5>Local da atividade</h5>
+          {{activityDetails.meetingPlace}}
+        </div> 
+      </div>
+      <div class="card-footer text-center card-content">
+        {% if isSubscribed %}
+        <form action="/activities/{{activityDetails.id}}?subscribing=0" method="POST">
+          <button type="submit" class="btn danger-button">Cancelar Inscrição</button>
+        </form>
+        {% endif %}
+      
+        {% if not isSubscribed %}
+        <form action="/activities/{{activityDetails.id}}?subscribing=1" method="POST">
+          <button type="submit" class="btn success-button">Inscrever-se</button>
+        </form>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+
 {% endblock %}

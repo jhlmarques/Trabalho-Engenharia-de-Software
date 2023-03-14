@@ -37,22 +37,13 @@ Atividades
           </div>
           <div class="card-body text-center card-content">
             <div class="card-text">
-              <h5>Tutor</h5>
-              {{activity.tutor}}
-              <hr/>
-              
               <h5>Data de início</h5>
               <div id="activityDate">
                 {{activity.startDate | format_date}}
               </div>
               <hr/>
-              
               <h5>Vagas restantes</h5>
               {{activity.slotsOccupied}}/{{activity.slots}}
-              <hr/>
-              
-              <h5>Local da atividade</h5>
-              {{activity.meetingPlace}}
             </div> 
           </div>
           <div class="card-footer text-center card-content">

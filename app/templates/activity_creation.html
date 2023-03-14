@@ -15,17 +15,17 @@ Atividades
       </select>
     </div>
     <div class="row" style="margin-bottom: 1.5rem">
-      <div class="col">
-        <label class="form-label">Dia no formato <strong>AAAAMMDD</strong></label>
-        <input name="date" type="text" class="form-control" placeholder="AAAAMMDD">
+      <div class="col input-group">
+        <label class="input-group-text">Dia do Evento</label>
+        <input name="date" type="date" class="form-control" placeholder="AAAAMMDD">
       </div>
-      <div class="col">
-        <label class="form-label">Horário no formato <strong>HH:MM:SS</strong></label>
-        <input name="time" type="text" class="form-control" placeholder="HH:MM:SS">
+      <div class="col input-group">
+        <label class="input-group-text">Horário do Evento</label>
+        <input name="time" type="time" class="form-control" placeholder="HH:MM:SS">
       </div>
     </div>
     <div>
-      <button type="submit" class="btn mb-3" style="color: #ededed; background-color: #685CFC; font-weight: bold;">Criar atividade</button>
+      <button type="submit" class="btn mb-3 success-button">Criar atividade</button>
     </div>
   </form>
   {% endif %}
@@ -40,26 +40,28 @@ Atividades
         {% endfor %}
       </select>
     </div>
-    <div class="row" style="margin-bottom: 1.5rem">
-      <div class="col">
-        <label class="form-label">Dia no formato <strong>AAAAMMDD</strong></label>
-        <input name="date" type="text" class="form-control" placeholder="AAAAMMDD">
+    <div class="row mb-3">
+      <div class="col input-group">
+        <label class="input-group-text">Dia do Evento</label>
+        <input name="date" type="date" class="form-control" placeholder="AAAAMMDD">
       </div>
-      <div class="col">
-        <label class="form-label">Horário no formato <strong>HH:MM:SS</strong></label>
-        <input name="time" type="text" class="form-control" placeholder="HH:MM:SS">
+      <div class="col input-group">
+        <label class="input-group-text">Horário do Evento</label>
+        <input name="time" type="time" class="form-control" placeholder="HH:MM:SS">
       </div>
     </div>
-    <div style="margin-bottom: 1.5rem">
-      <label class="form-label">Local do Workshop</label>
-      <input name="meetingPlace" type="text" class="form-control" placeholder="Local">
-    </div>
-    <div style="margin-bottom: 1.5rem">
-      <label class="form-label">Quantidade de Lugares Disponíveis</label>
-      <input name="slots" type="number" class="form-control" placeholder="Quantidade">
+    <div class="row mb-3">
+      <div class="col input-group">
+        <label class="input-group-text">Local do Workshop</label>
+        <input name="meetingPlace" type="text" class="form-control" placeholder="Local">
+      </div>
+      <div class="col input-group">
+        <label class="input-group-text">Lugares Disponíveis</label>
+        <input name="slots" type="number" class="form-control" placeholder="Quantidade">
+      </div>
     </div>
     <div>
-      <button type="submit" class="btn mb-3" style="color: #ededed; background-color: #685CFC; font-weight: bold;">Criar atividade</button>
+      <button type="submit" class="btn mb-3 success-button">Criar atividade</button>
     </div>
   </form>
   {% endif %}

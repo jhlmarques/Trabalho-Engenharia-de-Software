@@ -4,8 +4,8 @@
     --primary-highlight-color: #5748f1;
     --secondary-color: #C9C4FF;
     --secondary-highlight-color: #bbb6f1;
-    --success-color: #b0a945;
-    --success-highlight-color: #a19b3b;
+    --success-color: #99B030;
+    --success-highlight-color: #8a9f2b;
     --danger-color: #b04560;
     --danger-highlight-color: #7b3043;
     --light-color: #EDEDED;
@@ -34,6 +34,18 @@
 .secondary-button:hover{
     background-color: var(--secondary-highlight-color);
     color: var(--dark-color);
+    font-weight: bold;
+}
+
+.success-button{
+    background-color: var(--success-color);
+    color: var(--light-color);
+    font-weight: bold;
+}
+
+.success-button:hover{
+    background-color: var(--success-highlight-color);
+    color: var(--light-color);
     font-weight: bold;
 }
 
